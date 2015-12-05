@@ -1,7 +1,7 @@
-{-# LANGUAGE CPP #-}
-{-# LANGUAGE MagicHash #-}
 {-# LANGUAGE BangPatterns #-}
-{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE CPP          #-}
+{-# LANGUAGE MagicHash    #-}
+{-# LANGUAGE RankNTypes   #-}
 
 -- |
 -- Module      : Data.Binary.Serialise.CBOR.Read
@@ -14,40 +14,39 @@
 --
 -- CBOR format support.
 --
-module Data.Binary.Serialise.CBOR.Read (
-    deserialiseFromBytes,
-    deserialiseIncremental,
+module Data.Binary.Serialise.CBOR.Read
+  ( deserialiseFromBytes
+  , deserialiseIncremental
   ) where
-
-
-import Data.Binary.Serialise.CBOR.ByteOrder
-import Data.Binary.Serialise.CBOR.Decoding
-         (Decoder, DecodeAction(..), TokenType(..), getDecodeAction)
-
-import qualified Data.Binary.Get as Bin (Decoder(..))
 
 #if __GLASGOW_HASKELL__ < 710
 import           Control.Applicative
 #endif
-import           Control.Monad (ap)
+import           Control.Exception
+import           Control.Monad                        (ap)
+import qualified Data.Array.Base                      as A
 import           Data.Array.IArray
 import           Data.Array.Unboxed
-import qualified Data.Array.Base as A
-import           Data.Monoid
 import           Data.Bits
-import           Data.ByteString (ByteString)
-import qualified Data.ByteString                as BS
-import qualified Data.ByteString.Unsafe         as BS
-import qualified Data.ByteString.Lazy           as LBS
-import qualified Data.ByteString.Lazy.Internal  as LBS
-import qualified Data.Text          as T
-import qualified Data.Text.Encoding as T
-import           Data.Word
 import           Data.Int
-import           GHC.Word
+import           Data.Monoid
+import           Data.Word
 import           GHC.Exts
-import           GHC.Float (float2Double)
-import           Control.Exception
+import           GHC.Float                            (float2Double)
+
+import qualified Data.Binary.Get                      as Bin (Decoder (..))
+import           Data.ByteString                      (ByteString)
+import qualified Data.ByteString                      as BS
+import qualified Data.ByteString.Lazy                 as LBS
+import qualified Data.ByteString.Lazy.Internal        as LBS
+import qualified Data.ByteString.Unsafe               as BS
+import qualified Data.Text                            as T
+import qualified Data.Text.Encoding                   as T
+
+import           Data.Binary.Serialise.CBOR.ByteOrder
+import           Data.Binary.Serialise.CBOR.Decoding  (DecodeAction (..),
+                                                       Decoder, TokenType (..),
+                                                       getDecodeAction)
 
 
 #include "MachDeps.h"
@@ -58,6 +57,8 @@ import           Control.Exception
 #else
 #error expected WORD_SIZE_IN_BITS to be 32 or 64
 #endif
+
+--------------------------------------------------------------------------------
 
 deserialiseFromBytes :: Decoder a -> LBS.ByteString -> Either String a
 deserialiseFromBytes =
@@ -77,9 +78,8 @@ deserialiseIncremental =
     runIncrementalDecoder . runDecodeAction . getDecodeAction
 
 
-----------------------------------------------
+--------------------------------------------------------------------------------
 -- A monad for building incremental decoders
---
 
 type ByteOffset = Int64
 
@@ -554,7 +554,7 @@ go_slow_overlapped da sz bs_cur bs_next !offset =
 
       -- but the other possibilities can happen too
       FastDone bs_empty x ->
-        assert (BS.null bs_empty) $       
+        assert (BS.null bs_empty) $
         return (bs', offset', x)
 
       SlowConsumeTokenBytes bs_empty k len ->
@@ -604,7 +604,7 @@ getTokenVarLen len bs offset =
              in return (tok, BS.drop n bs')
 
         | otherwise -> getTokenVarLenSlow
-                         [bs',bs] 
+                         [bs',bs]
                          (len - (BS.length bs + BS.length bs'))
                          offset
 

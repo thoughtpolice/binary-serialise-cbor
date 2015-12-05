@@ -53,6 +53,8 @@ import qualified Data.Text       as T
 
 import           Prelude         hiding (encodeFloat)
 
+--------------------------------------------------------------------------------
+
 -- | An intermediate form used during serialisation, specified as a
 -- @'Monoid'@. It supports efficient concatenation, and is equivalent
 -- to a specialised @'Data.Monoid.Endo' 'Tokens'@ type.

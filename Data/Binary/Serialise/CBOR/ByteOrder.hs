@@ -1,7 +1,7 @@
-{-# LANGUAGE CPP #-}
-{-# LANGUAGE MagicHash #-}
-{-# LANGUAGE UnboxedTuples #-}
+{-# LANGUAGE CPP                      #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE MagicHash                #-}
+{-# LANGUAGE UnboxedTuples            #-}
 
 -- |
 -- Module      : Data.Binary.Serialise.CBOR.ByteOrder
@@ -33,21 +33,22 @@ module Data.Binary.Serialise.CBOR.ByteOrder where
 #error expected WORD_SIZE_IN_BITS to be 32 or 64
 #endif
 
-import           GHC.Exts
-import           GHC.Word
 import           Foreign.C.Types
 import           Foreign.Ptr
+import           GHC.Exts
 import           GHC.ForeignPtr
+import           GHC.Word
 #if !defined(HAVE_BYTESWAP_PRIMOPS) || !defined(MEM_UNALIGNED_OPS)
-import           Data.Bits ((.|.), shiftL)
+import           Data.Bits                (shiftL, (.|.))
 #endif
 #if !defined(ARCH_64bit)
-import           GHC.IntWord64 (wordToWord64#)
+import           GHC.IntWord64            (wordToWord64#)
 #endif
-import           Data.ByteString (ByteString)
+
+import           Data.ByteString          (ByteString)
 import qualified Data.ByteString.Internal as BS
 
-
+--------------------------------------------------------------------------------
 
 {-# INLINE grabWord8 #-}
 grabWord8 :: Ptr () -> Word

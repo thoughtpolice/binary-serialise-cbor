@@ -1,23 +1,40 @@
-{-# LANGUAGE CPP, MagicHash #-}
-module Data.Binary.Serialise.CBOR.FlatTerm (
-    FlatTerm(..),
-    toFlatTerm,
-    fromFlatTerm
+{-# OPTIONS_GHC -fno-warn-unused-binds #-}
+{-# LANGUAGE CPP          #-}
+{-# LANGUAGE MagicHash    #-}
+
+-- |
+-- Module      : Data.Binary.Serialise.CBOR.FlatTerm
+-- Copyright   : (c) Duncan Coutts 2015
+-- License     : BSD3-style (see LICENSE.txt)
+--
+-- Maintainer  : duncan@community.haskell.org
+-- Stability   : experimental
+-- Portability : non-portable (GHC extensions)
+--
+-- Lorem ipsum...
+--
+module Data.Binary.Serialise.CBOR.FlatTerm
+  ( -- ** Flat terms
+    FlatTerm
+  , TermToken(..)
+  , toFlatTerm
+  , fromFlatTerm
   ) where
-
-import Data.Binary.Serialise.CBOR.Encoding (Encoding(..))
-import qualified Data.Binary.Serialise.CBOR.Encoding as Enc
-import Data.Binary.Serialise.CBOR.Decoding as Dec
-
-import GHC.Word  (Word(W#), Word8(W8#), Word64(W64#))
-import GHC.Int   (Int64(I64#))
-import GHC.Exts  (Int(I#), Int#, Word#, Float#, Double#)
-import GHC.Float (Float(F#), Double(D#), float2Double)
 
 import Data.Word
 import Data.Int
-import Data.Text (Text)
-import Data.ByteString (ByteString)
+
+import           GHC.Word  (Word(W#), Word8(W8#), Word64(W64#))
+import           GHC.Int   (Int64(I64#))
+import           GHC.Exts  (Int(I#), Int#, Word#, Float#, Double#)
+import           GHC.Float (Float(F#), Double(D#), float2Double)
+
+import           Data.Text (Text)
+import           Data.ByteString (ByteString)
+
+import           Data.Binary.Serialise.CBOR.Encoding (Encoding(..))
+import qualified Data.Binary.Serialise.CBOR.Encoding as Enc
+import           Data.Binary.Serialise.CBOR.Decoding as Dec
 
 #include "MachDeps.h"
 
@@ -28,11 +45,11 @@ import Data.ByteString (ByteString)
 #error expected WORD_SIZE_IN_BITS to be 32 or 64
 #endif
 
+--------------------------------------------------------------------------------
 
 type FlatTerm = [TermToken]
 
 data TermToken =
-
       TkInt      {-# UNPACK #-} !Int
     | TkInteger                 !Integer
     | TkBytes    {-# UNPACK #-} !ByteString

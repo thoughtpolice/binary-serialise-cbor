@@ -1,7 +1,7 @@
-{-# LANGUAGE CPP #-}
-{-# LANGUAGE MagicHash #-}
 {-# LANGUAGE BangPatterns #-}
-{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE CPP          #-}
+{-# LANGUAGE MagicHash    #-}
+{-# LANGUAGE RankNTypes   #-}
 
 -- |
 -- Module      : Data.Binary.Serialise.CBOR.Decoding
@@ -14,82 +14,81 @@
 --
 -- Lorem ipsum...
 --
-module Data.Binary.Serialise.CBOR.Decoding (
+module Data.Binary.Serialise.CBOR.Decoding
+  ( -- * Decode primitive operations
+    Decoder
+  , DecodeAction(..)
+  , getDecodeAction
 
-  -- * Decode primitive operations
-  Decoder,
-  DecodeAction(..),
-  getDecodeAction,
-
-  -- ** Read input tokens
-  decodeWord,
-  decodeWord64,
-  decodeNegWord,
-  decodeNegWord64,
-  decodeInt,
-  decodeInt64,
-  decodeInteger,
-  decodeFloat,
-  decodeDouble,
-  decodeBytes,
-  decodeBytesIndef,
-  decodeString,
-  decodeStringIndef,
-  decodeListLen,
-  decodeListLenIndef,
-  decodeMapLen,
-  decodeMapLenIndef,
-  decodeTag,
-  decodeTag64,
-  decodeBool,
-  decodeNull,
-  decodeSimple,
+    -- ** Read input tokens
+  , decodeWord
+  , decodeWord64
+  , decodeNegWord
+  , decodeNegWord64
+  , decodeInt
+  , decodeInt64
+  , decodeInteger
+  , decodeFloat
+  , decodeDouble
+  , decodeBytes
+  , decodeBytesIndef
+  , decodeString
+  , decodeStringIndef
+  , decodeListLen
+  , decodeListLenIndef
+  , decodeMapLen
+  , decodeMapLenIndef
+  , decodeTag
+  , decodeTag64
+  , decodeBool
+  , decodeNull
+  , decodeSimple
 
   -- ** Specialised Read input token operations
-  decodeWordOf,
-  decodeListLenOf,
+  , decodeWordOf
+  , decodeListLenOf
 
   -- ** Branching operations
---  decodeBytesOrIndef,
---  decodeStringOrIndef,
-  decodeListLenOrIndef,
-  decodeMapLenOrIndef,
-  decodeBreakOr,
+--, decodeBytesOrIndef,
+--, decodeStringOrIndef,
+  , decodeListLenOrIndef
+  , decodeMapLenOrIndef
+  , decodeBreakOr
 
   -- ** Inspecting the token type
-  peekTokenType,
-  TokenType(..),
+  , peekTokenType
+  , TokenType(..)
 
   -- ** Special operations
---  ignoreTerms,
---  decodeTrace,
+--, ignoreTerms,
+--, decodeTrace,
 
   -- * Sequence operations
-  decodeSequenceLenIndef,
-  decodeSequenceLenN,
+  , decodeSequenceLenIndef
+  , decodeSequenceLenN
   ) where
 
-
-import           GHC.Exts
-import           GHC.Word
-import           GHC.Int
-import           Data.Text (Text)
-import           Data.ByteString (ByteString)
 import           Control.Applicative
+import           GHC.Exts
+import           GHC.Int
+import           GHC.Word
 
-import           Prelude hiding (decodeFloat)
+import           Data.ByteString     (ByteString)
+import           Data.Text           (Text)
+
+import           Prelude             hiding (decodeFloat)
 
 #include "MachDeps.h"
 
 #if WORD_SIZE_IN_BITS == 64
 #define ARCH_64bit
 #elif WORD_SIZE_IN_BITS == 32
-import           GHC.IntWord64 (wordToWord64#)
+import           GHC.IntWord64       (wordToWord64#)
 #else
 #error expected WORD_SIZE_IN_BITS to be 32 or 64
 #endif
 
-
+--------------------------------------------------------------------------------
 
 data Decoder a = Decoder {
        runDecoder :: forall r. (a -> DecodeAction r) -> DecodeAction r

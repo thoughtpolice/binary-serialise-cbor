@@ -1,4 +1,5 @@
-{-# LANGUAGE CPP, DeriveDataTypeable #-}
+{-# LANGUAGE CPP                #-}
+{-# LANGUAGE DeriveDataTypeable #-}
 
 -- |
 -- Module      : Data.Binary.Serialise.CBOR
@@ -36,7 +37,7 @@ module Data.Binary.Serialise.CBOR
     Serialise(..),
   ) where
 
-import           Control.Exception                (Exception(..), throw)
+import           Control.Exception                (Exception (..), throw)
 import           Data.Typeable                    (Typeable)
 
 import qualified Data.Binary.Get                  as Bin

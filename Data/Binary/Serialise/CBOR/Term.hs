@@ -11,30 +11,32 @@
 --
 -- Lorem ipsum...
 --
-module Data.Binary.Serialise.CBOR.Term (
-    Term(..),
-    encodeTerm,
-    decodeTerm,
-    ignoreTerm,
+module Data.Binary.Serialise.CBOR.Term
+  ( Term(..)
+  , encodeTerm
+  , decodeTerm
+  , ignoreTerm
   ) where
 
-import Data.Binary.Serialise.CBOR.Encoding hiding (Tokens(..))
-import Data.Binary.Serialise.CBOR.Decoding
-import Data.Binary.Serialise.CBOR.Class (Serialise(..))
-
-import           Data.Word
-import qualified Data.Text as T
-import qualified Data.Text.Lazy as LT
-import qualified Data.ByteString as BS
-import qualified Data.ByteString.Lazy as LBS
-import           Data.Monoid
 import           Control.Applicative
+import           Data.Monoid
+import           Data.Word
 
-import Prelude hiding (encodeFloat, decodeFloat)
+import qualified Data.ByteString                     as BS
+import qualified Data.ByteString.Lazy                as LBS
+import qualified Data.Text                           as T
+import qualified Data.Text.Lazy                      as LT
 
+import           Data.Binary.Serialise.CBOR.Class    (Serialise (..))
+import           Data.Binary.Serialise.CBOR.Decoding
+import           Data.Binary.Serialise.CBOR.Encoding hiding (Tokens (..))
+
+import           Prelude                             hiding (decodeFloat,
+                                                      encodeFloat)
+
+--------------------------------------------------------------------------------
 
 -- | A general CBOR term
---
 data Term = TInt     {-# UNPACK #-} !Int
           | TInteger                !Integer
           | TBytes                  !BS.ByteString

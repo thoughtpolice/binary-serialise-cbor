@@ -13,11 +13,11 @@
 --
 module Data.Binary.Serialise.CBOR.IO
   ( -- * High level file API
-    writeFileSerialise,
-    readFileDeserialise,
+    writeFileSerialise
+  , readFileDeserialise
 
     -- * High level @'Handle'@ API
-    hPutSerialise
+  , hPutSerialise
   ) where
 
 import           Control.Exception          (throwIO)

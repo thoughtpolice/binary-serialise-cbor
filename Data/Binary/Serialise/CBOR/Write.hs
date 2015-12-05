@@ -49,7 +49,7 @@ import           Data.Binary.Serialise.CBOR.Encoding
 #error expected WORD_SIZE_IN_BITS to be 32 or 64
 #endif
 
-------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- | Turn an @'Encoding'@ into a @'L.ByteString'@ in CBOR binary format.
 toLazyByteString :: Encoding -> L.ByteString
