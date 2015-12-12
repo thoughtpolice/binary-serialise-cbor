@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -fno-warn-unused-binds #-}
-{-# LANGUAGE CPP          #-}
-{-# LANGUAGE MagicHash    #-}
+{-# LANGUAGE CPP       #-}
+{-# LANGUAGE MagicHash #-}
 
 -- |
 -- Module      : Data.Binary.Serialise.CBOR.FlatTerm
@@ -203,7 +203,7 @@ fromFlatTerm decoder =
     go (ConsumeBreakOr        k) (TkBreak     : ts) = go (k True) ts
     go (ConsumeBreakOr        k) ts@(_        : _ ) = go (k False) ts
 
---    go (PeekTokenType k) =
+    go (PeekTokenType _k) _ = error "TODO FIXME: fromFlatTerm/go - PeekTokenType case NIH!"
 
     go (Fail msg) _  = Left msg
     go (Done x)   [] = Right x
